@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: micro-consumer
+  http: 
+    multipart: 
+      enabled: true#默认支持文件上传
+      file-size-threshold: 0#支持文件写入磁盘
+      location: #上传文件的临时目录
+      max-file-size: 1M# 最大支持文件大小
+      max-request-size: 10M # 最大支持请求大小
+  datasource:
+        name: MySql
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://127.0.0.1:3306/cube?useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: huawei@123
+        driver-class-name: com.mysql.jdbc.Driver
+        minIdle: 5
+        maxActive: 100
+        initialSize: 10
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 50
+        removeAbandoned: true
+        filters: stat
+        cachePrepStmts: true  # 开启二级缓存
+server: 
+  port: 8084
+  session-timeout: 60
+#在被监控的服务上添加暴露点
+management:
+  endpoints:
+    web:
+      #base-path: /actuator
+      exposure:
+        include: hystrix.stream
+#       include: '*'   #'*'代表开放所有端点。
+mybatis:
+     mapperLocations: classpath:mapper/*.xml
+     typeAliasesPackage: com.micro.service    
+     mapperScanPackage: com.micro.service
+     configLocation: classpath:mybatis-config.xml
+eureka: 
+  instance: 
+    hostname: 127.0.0.1
+    prefre-ip-address: true
+    serviceId: micro-service
+    #metadata-map:
+     #cluster: ribbon#集群名为ribbon，正好对应Turbine配置文件的集群名
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl: 
+      defaultZone: http://127.0.0.1:8080/eureka/#,http://127.0.0.1:8081/eureka/,http://127.0.0.1:8082/eureka/
+logger:
+  config: 
+    classpath: logback.xml
+  level: 
+    com.micro.service.study.dao: true
+  path: /Users/zhou/Desktop
+security:
+  sessions: stateless#服务无状态，always服务有状态
+feign:
+  compression:
+    request:
+      mime-types:       # 可以被压缩的类型
+      - text/xml
+      - application/xml
+      - application/json
+      min-request-size: 2048 # 超过2048的字节进行压缩
