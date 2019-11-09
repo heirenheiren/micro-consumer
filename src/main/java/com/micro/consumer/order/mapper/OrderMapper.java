@@ -9,6 +9,8 @@ import com.micro.consumer.order.model.OrderEntity;
 @Repository
 @Mapper
 public interface OrderMapper {
-	public List<OrderEntity> getOrders();
 	public OrderEntity getOrder(int id);
+	public List<OrderEntity> getOrders();
+	public void updateOrder(OrderEntity entity);
+	public void insertOrder(OrderEntity entity);
 }

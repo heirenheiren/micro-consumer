@@ -6,8 +6,39 @@
 	<select id="getOrders" resultType="hashmap">
 		SELECT * FROM t_order;
 	</select>
-	
-	<select id="getOrder" parameterType="int" resultType="com.micro.consumer.order.model.OrderEntity">
-		SELECT * FROM t_order WHERE ID = #{id}
+
+	<select id="getOrder" parameterType="int"
+		resultType="com.micro.consumer.order.model.OrderEntity">
+		SELECT * FROM t_order WHERE ID = ${id}
 	</select>
+
+	<update id="updateOrder"
+		parameterType="com.micro.consumer.order.model.OrderEntity"
+		flushCache="true" statementType="PREPARED" timeout="20">
+		update t_order set
+		name = #{name},
+		type = ${type},
+		code = #{code}
+		where id = ${id}
+	</update>
+
+	<delete id="deleteOrder" parameterType="int">
+		delete from t_order where
+		id = ${id}
+	</delete>
+
+	<insert id="insertOrder" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into t_order (name,type,code)
+		values
+		(#{name},${type},#{code})
+	</insert>
+
+	<insert id="insertOrders" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into t_order (name,type,code) values
+		<foreach item="item" collection="list" separator=",">
+			(#{item.name},${item.type},#{item.code})
+		</foreach>
+	</insert>
 </mapper>

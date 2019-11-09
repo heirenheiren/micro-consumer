@@ -1,21 +1,22 @@
 package com.micro.consumer.order.controller;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.micro.consumer.order.model.OrderEntity;
-import com.micro.consumer.order.service.OrderInterface;
+import com.micro.consumer.order.service.OrderService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,44 +29,68 @@ public class OrderController {
 	private Lock lock = new ReentrantLock();
 	
 	@Autowired
-	public OrderInterface orderServiceImpl;
+	public OrderService orderServiceImpl;
 	
 	@GetMapping("/getOrder")
-	@HystrixCommand(fallbackMethod="getOrderFallback") 
-	public void getOrder(@RequestParam(value="id", required=true) Integer id) {
-		log.info("before");
-		OrderEntity orderEntity = orderServiceImpl.getOrder(id);
-		if(orderEntity == null) {
-			throw new RuntimeException("订单信息不存在.");
-		}
-		log.info(orderEntity.toString());
-	}
-	
-	@GetMapping("/getOrderById/{id}")
-	@CacheResult(cacheKeyMethod = "getOrderId")
-	@HystrixCommand(fallbackMethod="getOrderFallback")
-	public void getOrderById(@PathVariable(value="id", required=true) Integer id) {
-		HystrixRequestContext.initializeContext();
-		log.info("before");
-		OrderEntity orderEntity = orderServiceImpl.getOrder(id);
-		if(orderEntity == null) {
-			throw new RuntimeException("订单信息不存在.");
-		}
-		log.info(orderEntity.toString());
+	public OrderEntity getOrder(@RequestParam(value="id", required=true) Integer id) {
+		HystrixRequestContext context = HystrixRequestContext.initializeContext();
+		orderServiceImpl.getOrder(id);
+		orderServiceImpl.getOrder(id);
+		context.close();
+		return null;
 	}
 	
 	/**
-	 * 
+	 * 查询-》设置缓存-》更新-》清理缓存-》再查询-》设置缓存-》再查询-》读取缓存
 	 * @param id
-	 * @return   必须是String类型
+	 * @return
 	 */
-	public String getOrderId(Integer id) {
-		log.info("cacheKeyMethod id:{}",id);
-		return String.valueOf(id);
+	@GetMapping("/getOrderById/{id}")
+	public OrderEntity getOrderById(@PathVariable(value="id", required=true) Integer id) {
+		HystrixRequestContext context = HystrixRequestContext.initializeContext();
+		orderServiceImpl.getOrder(id);
+		
+		OrderEntity orderEntity = new OrderEntity();
+		orderEntity.setId(id);
+		orderEntity.setName("wutong");
+		orderEntity.setType(2);
+		orderEntity.setCode("2222222222222");
+		orderServiceImpl.updateOrder(orderEntity);
+		orderServiceImpl.getOrder(id);
+		orderServiceImpl.getOrder(id);
+		context.close();
+		return orderEntity;
 	}
 	
-	public void getOrderFallback(Integer id, Throwable e) {// 此时方法的参数和返回值与get()一致
-		log.info("getFallback");
+	@PostMapping("/addOrder")
+	public void addOrder() {
+		HystrixRequestContext context = HystrixRequestContext.initializeContext();
+		OrderEntity orderEntity = new OrderEntity();
+		orderEntity.setName("卧槽，无情"+new Random().nextInt());
+		orderEntity.setType(2);
+		orderEntity.setCode("333333333333333");
+		orderServiceImpl.insertOrder(orderEntity);
+		this.getOrder(orderEntity.getId());
+		this.getOrder(orderEntity.getId());
+		context.close();
+	}
+	
+	/**
+	 * 更新-》设置缓存-》查询-》读取缓存
+	 */
+	@PostMapping("/updateOrder")
+	public void updateOrder() {
+		HystrixRequestContext context = HystrixRequestContext.initializeContext();
+		OrderEntity orderEntity = new OrderEntity();
+		orderEntity.setId(1);
+		orderEntity.setName("卧槽，无情"+new Random().nextInt());
+		orderEntity.setType(2);
+		orderEntity.setCode("update");
+		orderServiceImpl.updateOrder(orderEntity);
+		
+		this.getOrder(orderEntity.getId());
+		this.getOrder(orderEntity.getId());
+		context.close();
 	}
 	
 	@GetMapping("/getOrders")

@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.micro.consumer.order.model.OrderEntity;
 
-public interface OrderInterface {
+public interface OrderService {
 	public OrderEntity getOrder(int id);
 	public List<OrderEntity> getOrders();
-	public void importOrder();
+	public void updateOrder(OrderEntity entity);
+	public OrderEntity insertOrder(OrderEntity entity);
 }
