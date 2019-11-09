@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.micro.consumer.order.mapper.OrderMapper;
 import com.micro.consumer.order.model.OrderEntity;
 import com.micro.consumer.order.service.OrderService;
-import com.micro.consumer.order.thread.ThreadTasks;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheKey;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheRemove;

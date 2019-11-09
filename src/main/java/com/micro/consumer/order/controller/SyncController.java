@@ -19,6 +19,8 @@ public class SyncController {
 	
 	@GetMapping("/starSync")
     public void useMySyncTask() {
+		log.info("start");
 		syncServiceImpl.importOrder();
+		log.info("end");
     }
 }

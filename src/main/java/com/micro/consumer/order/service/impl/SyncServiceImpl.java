@@ -21,8 +21,7 @@ public class SyncServiceImpl implements SyncService {
         for (int i = 0; i < 10; i++) {
         	threadTasks.startThreadTasks();
         }
-        
-		log.info("end");
+        log.info("end");
 	}
 
 }

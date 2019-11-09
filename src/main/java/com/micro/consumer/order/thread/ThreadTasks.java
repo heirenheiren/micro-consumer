@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 //@EnableAsync如果没有配置TreadPoolConfig可以直接在用这个注解开启这个类的异步方法
 public class ThreadTasks {
 	@Async
-	//@Async("TreadPoolConfig自定义的Bean名字")
+	//@Async("可以使用TreadPoolConfig自定义的Bean名字")
 	public void startThreadTasks() {
 		Random random = new Random();
 		log.info("{} start task",Thread.currentThread().getName());
