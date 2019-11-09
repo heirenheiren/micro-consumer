@@ -3,7 +3,7 @@
  PUBLIC " -//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-	<classPathEntry location="‎⁨D/java/tools/apache-maven-3.5.3/repository⁩/⁨mysql⁩/⁨mysql-connector-java⁩/⁨8.0.15⁩/mysql-connector-java-8.0.15.jar"/>
+	<classPathEntry location="‎⁨/D/java/tools/apache-maven-3.5.3/repository/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar"/>
 	<context id="MySQL" targetRuntime="MyBatis3">
 		<commentGenerator>
 			<property name="suppressDate" value="false" />

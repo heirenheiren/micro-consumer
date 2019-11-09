@@ -3,7 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.micro.consumer.order.mapper.OrderMapper">
-  <insert>
-  		
-  </insert>
+	<select id="getOrders" resultType="hashmap">
+		SELECT * FROM t_order;
+	</select>
+	
+	<select id="getOrder" parameterType="int" resultType="com.micro.consumer.order.model.OrderEntity">
+		SELECT * FROM t_order WHERE ID = #{id}
+	</select>
 </mapper>

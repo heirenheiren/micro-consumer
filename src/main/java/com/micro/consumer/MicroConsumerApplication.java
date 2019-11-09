@@ -24,13 +24,4 @@ public class MicroConsumerApplication
     	SpringApplication.run(MicroConsumerApplication.class, args);
     }
     
-    @Bean
-    public ServletRegistrationBean<HystrixMetricsStreamServlet> getServlet(){
-        HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
-        ServletRegistrationBean<HystrixMetricsStreamServlet> registrationBean = new ServletRegistrationBean<HystrixMetricsStreamServlet>(streamServlet);
-        registrationBean.setLoadOnStartup(1);
-        registrationBean.addUrlMappings("/hystrix.stream");
-        registrationBean.setName("HystrixMetricsStreamServlet");
-        return registrationBean;
-    }
 }

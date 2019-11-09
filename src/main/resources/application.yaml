@@ -1,3 +1,8 @@
+server: 
+  port: 8084
+  session-timeout: 60
+  #servlet:
+    #context-path: /micro-consumer
 spring:
   application:
     name: micro-consumer
@@ -30,9 +35,8 @@ spring:
         removeAbandoned: true
         filters: stat
         cachePrepStmts: true  # 开启二级缓存
-server: 
-  port: 8084
-  session-timeout: 60
+  output:
+    ansi: enabled
 #在被监控的服务上添加暴露点
 management:
   endpoints:
@@ -43,14 +47,15 @@ management:
 #       include: '*'   #'*'代表开放所有端点。
 mybatis:
      mapperLocations: classpath:mapper/*.xml
-     typeAliasesPackage: com.micro.service    
-     mapperScanPackage: com.micro.service
+     typeAliasesPackage: com.micro.costumer    
+     mapperScanPackage: com.micro.costumer
      configLocation: classpath:mybatis-config.xml
 eureka: 
   instance: 
     hostname: 127.0.0.1
     prefre-ip-address: true
-    serviceId: micro-service
+    #service-id: 随便一个名字
+    #appname: ${spring.application.name}
     #metadata-map:
      #cluster: ribbon#集群名为ribbon，正好对应Turbine配置文件的集群名
   client:
@@ -62,7 +67,7 @@ logger:
   config: 
     classpath: logback.xml
   level: 
-    com.micro.service.study.dao: true
+    com.micro.consumer.order.mapper:debug
   path: /Users/zhou/Desktop
 security:
   sessions: stateless#服务无状态，always服务有状态
