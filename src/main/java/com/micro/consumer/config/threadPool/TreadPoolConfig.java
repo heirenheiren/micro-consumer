@@ -1,4 +1,4 @@
-package com.micro.consumer.config.ThreadPool;
+package com.micro.consumer.config.threadPool;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;

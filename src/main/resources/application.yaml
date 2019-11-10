@@ -1,5 +1,5 @@
 server: 
-  port: 8084
+  port: 8085
   session-timeout: 60
   #servlet:
     #context-path: /micro-consumer
@@ -62,7 +62,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl: 
-      defaultZone: http://127.0.0.1:8080/eureka/#,http://127.0.0.1:8081/eureka/,http://127.0.0.1:8082/eureka/
+      defaultZone: http://127.0.0.1:8081/eureka/#,http://127.0.0.1:8082/eureka/,http://127.0.0.1:8083/eureka/
 logger:
   config: 
     classpath: logback.xml
