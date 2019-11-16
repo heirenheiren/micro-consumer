@@ -79,3 +79,9 @@ feign:
       - application/xml
       - application/json
       min-request-size: 2048 # 超过2048的字节进行压缩
+com: 
+  micro: 
+    starter: 
+      file: 
+        serviceName: aaa
+        port: 8888
