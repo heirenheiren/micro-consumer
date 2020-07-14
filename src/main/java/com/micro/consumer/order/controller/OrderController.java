@@ -2,6 +2,8 @@ package com.micro.consumer.order.controller;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -64,15 +66,25 @@ public class OrderController {
 	
 	@PostMapping("/addOrder")
 	public void addOrder() {
-		HystrixRequestContext context = HystrixRequestContext.initializeContext();
-		OrderEntity orderEntity = new OrderEntity();
-		orderEntity.setName("卧槽，无情"+new Random().nextInt());
-		orderEntity.setType(2);
-		orderEntity.setCode("333333333333333");
-		orderServiceImpl.insertOrder(orderEntity);
-		this.getOrder(orderEntity.getId());
-		this.getOrder(orderEntity.getId());
-		context.close();
+		//HystrixRequestContext context = HystrixRequestContext.initializeContext();
+		Executor e = Executors.newFixedThreadPool(100);
+		for (int i = 0; i < 10000; i++) {
+			e.execute(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					OrderEntity orderEntity = new OrderEntity();
+					orderEntity.setName("卧槽，无情"+new Random().nextInt());
+					orderEntity.setType(new Random().nextInt(10));
+					orderEntity.setCode(new Random().nextLong()+"");
+					orderServiceImpl.insertOrder(orderEntity);
+				}
+			});
+		}
+		//this.getOrder(orderEntity.getId());
+		//this.getOrder(orderEntity.getId());
+		//context.close();
 	}
 	
 	/**
